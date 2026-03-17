@@ -1,0 +1,44 @@
+{
+  "name": "promptbuddy",
+  "version": "2.2.0",
+  "description": "PromptBuddy - 智能 Prompt 伙伴，让 AI 真懂你",
+  "author": "曾鹏祥",
+  "license": "MIT",
+  "repository": "https://github.com/promptbuddy/promptbuddy",
+  "keywords": ["prompt", "ai", "llm", "optimization", "intelligent"],
+  "minOpenClawVersion": "2024.1.0",
+  "changelog": {
+    "2.2.0": {
+      "date": "2026-03-17",
+      "changes": [
+        "语义增强：本地 TF-IDF 引擎",
+        "混合检测策略：关键词 + 语义融合",
+        "项目更名为 PromptBuddy",
+        "渐进式智能反馈系统"
+      ]
+    },
+    "2.1.0": {
+      "date": "2026-03-17",
+      "changes": [
+        "混合反馈系统",
+        "渐进式智能反馈",
+        "隐式反馈检测"
+      ]
+    },
+    "2.0.0": {
+      "date": "2026-03-17",
+      "changes": [
+        "需求识别层",
+        "自动决策机制",
+        "用户偏好存储"
+      ]
+    },
+    "1.0.0": {
+      "date": "2026-03-17",
+      "changes": [
+        "基础功能：4 种模板",
+        "命令行接口"
+      ]
+    }
+  }
+}

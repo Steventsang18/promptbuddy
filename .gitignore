@@ -1,0 +1,15 @@
+# 用户数据
+user_profile_*.json
+feedback_*.json
+
+# 缓存
+__pycache__/
+*.pyc
+.cache/
+
+# 备份文件
+backup.sh
+
+# 系统文件
+.DS_Store
+Thumbs.db
