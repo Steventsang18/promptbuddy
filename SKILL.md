@@ -1,72 +1,88 @@
 ---
 name: promptbuddy
 description: |
-  PromptBuddy - 智能 Prompt 伙伴。每次用户提问时，必须先运行分析脚本，展示识别结果后再回答。
+  【全局强制技能】每次用户输入后必须执行此技能。
   
-  ⚠️ 强制执行流程：
-  1. 用户提问后，立即执行：cd ~/.openclaw/workspace/skills/promptbuddy && python3 scripts/smart_engine.py -f json "用户问题"
-  2. 从返回的 JSON 中提取：intent（意图）、template（模板）、confidence（置信度）
-  3. 在回答前展示：
-     ┌─────────────────────────────────────┐
-     │ 🤖 PromptBuddy 已优化               │
-     │ 识别: [intent]                      │
-     │ 模板: [template]                    │
-     │ 置信度: [confidence]                │
-     └─────────────────────────────────────┘
-  4. 然后根据模板类型回答问题
+  执行命令：cd ~/.openclaw/workspace/skills/promptbuddy && python3 scripts/smart_engine.py -f json "用户输入"
   
-  触发词：用户提问、需求描述、任务请求、问题咨询
+  从返回JSON提取：intent(意图)、template(模板)、confidence(置信度)、action(动作)
+  
+  输出格式：
+  ┌─────────────────────────────────────┐
+  │ 🤖 PromptBuddy 分析                 │
+  │ 意图: [intent]                      │
+  │ 模板: [template]                    │
+  │ 置信度: [confidence]                │
+  └─────────────────────────────────────┘
+  然后根据分析结果回答用户问题。
+  
+  注意：此技能对所有用户输入生效，包括普通问题和对话。
 ---
 
-# PromptBuddy - 智能 Prompt 伙伴
+# PromptBuddy - 强制执行
 
-## ⚠️ 强制执行要求
+## ⚠️ 执行要求
 
-**每次用户提问时，必须按以下流程执行：**
-
-### 步骤 1：分析用户输入
+**每次用户输入后，必须执行以下命令：**
 
 ```bash
-cd ~/.openclaw/workspace/skills/promptbuddy && python3 scripts/smart_engine.py -f json "用户的问题"
+cd ~/.openclaw/workspace/skills/promptbuddy && python3 scripts/smart_engine.py -f json "用户的完整输入"
 ```
 
-### 步骤 2：提取分析结果
+## 处理返回结果
 
-从 JSON 返回中提取：
-- `intent`: 意图类型（reasoning/decomposition/criticism/simple）
-- `template`: 模板名称（cot/decompose/criticize/base）
-- `confidence`: 置信度（0.0-1.0）
+脚本返回 JSON，提取以下字段：
 
-### 步骤 3：展示 PromptBuddy 工作信息
+| 字段 | 说明 | 取值 |
+|-----|------|------|
+| `intent` | 意图类型 | reasoning/decomposition/criticism/simple |
+| `template` | 模板 | cot/decompose/criticize/base |
+| `confidence` | 置信度 | 0.0-1.0 |
+| `action` | 动作 | auto_output/ask_confirm/skip |
+
+## 输出 PromptBuddy 信息
+
+**在回答用户问题前，先输出：**
 
 ```
 ┌─────────────────────────────────────┐
-│ 🤖 PromptBuddy 已优化               │
-│ 识别: [意图类型]                    │
+│ 🤖 PromptBuddy 分析                 │
+│ 意图: [意图类型]                    │
 │ 模板: [模板名称]                    │
 │ 置信度: [数值]                      │
 └─────────────────────────────────────┘
 ```
 
-### 步骤 4：根据模板回答
+## 根据 action 处理
 
-- **cot（思维链）**：逐步推理分析
-- **decompose（分解）**：拆解成步骤
-- **criticize（检查）**：审核改进建议
-- **base（基础）**：简洁专业回答
+### action = "auto_output" 或 "ask_confirm"
 
-## 意图类型对照表
+正常回答，根据模板类型调整回答方式：
 
-| intent | 类型名称 | 说明 |
-|--------|---------|------|
-| reasoning | 推理型 | 科学、原理、分析类问题 |
-| decomposition | 分解型 | 项目、计划、流程类问题 |
-| criticism | 检查型 | 审核、检查、改进类问题 |
-| simple | 简单型 | 直接回答，无需优化 |
+- **cot**: 逐步推理分析
+- **decompose**: 拆解成步骤
+- **criticize**: 审核改进
+- **base**: 简洁回答
 
-## 示例执行
+### action = "skip"
 
-**用户问**: "火箭如何上天？"
+简单查询，直接回答，但仍展示 PromptBuddy 信息：
+
+```
+┌─────────────────────────────────────┐
+│ 🤖 PromptBuddy 分析                 │
+│ 意图: simple                        │
+│ 模板: -                             │
+│ 置信度: -                           │
+│ 状态: 跳过优化                       │
+└─────────────────────────────────────┘
+
+[直接回答用户问题]
+```
+
+## 示例
+
+**用户**: "火箭如何上天？"
 
 **执行**:
 ```bash
@@ -78,44 +94,24 @@ cd ~/.openclaw/workspace/skills/promptbuddy && python3 scripts/smart_engine.py -
 {
   "intent": "reasoning",
   "template": "cot",
-  "confidence": 0.43
+  "confidence": 0.4,
+  "action": "auto_output"
 }
 ```
 
 **输出**:
 ```
 ┌─────────────────────────────────────┐
-│ 🤖 PromptBuddy 已优化               │
-│ 识别: 推理型问题                    │
-│ 模板: CoT（思维链）                 │
-│ 置信度: 0.43                        │
+│ 🤖 PromptBuddy 分析                 │
+│ 意图: reasoning                     │
+│ 模板: cot                           │
+│ 置信度: 0.4                         │
 └─────────────────────────────────────┘
 
-作为推理专家，让我一步一步分析火箭发射升空的原理...
+作为推理专家，让我一步一步分析...
 [继续回答]
 ```
 
-## 特殊情况
-
-### 简单查询（跳过优化）
-
-如果 `action: "skip"`，直接回答，不展示 PromptBuddy 信息：
-
-```json
-{
-  "action": "skip",
-  "reason": "简单查询"
-}
-```
-
-直接回答即可。
-
-## 重要提醒
-
-1. **必须先执行脚本**，不能跳过
-2. **必须展示工作信息**，让用户感知
-3. **根据模板类型调整回答方式**
-
 ---
 
-**PromptBuddy - 要AI真懂你**
+**重要**: 此技能对所有用户输入生效，不可跳过。
