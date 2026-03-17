@@ -1,40 +1,90 @@
 ---
 name: promptbuddy
-description: PromptBuddy - Intelligent Prompt Partner. Make AI Truly Understand You. Auto-detects user needs and intelligently generates optimized prompts. No trigger words required.
+description: |
+  PromptBuddy - 智能 Prompt 伙伴。让 AI 真懂你。
+  自动识别用户需求，智能选择最佳模板，生成结构化高效 Prompt。
+  无需触发词，越用越懂你。
+
+  ⚠️ 重要：在回答用户问题前，先展示 PromptBuddy 的工作信息：
+  1. 识别的问题类型
+  2. 选择的模板
+  3. 置信度
+  4. （可选）优化后的 Prompt 预览
+
+  格式示例：
+  ┌─────────────────────────────────────┐
+  │ 🤖 PromptBuddy 已优化               │
+  │ 识别: 推理型问题                    │
+  │ 模板: CoT（思维链）                 │
+  │ 置信度: 0.43                        │
+  └─────────────────────────────────────┘
+  然后开始正常回答...
 ---
 
 # PromptBuddy
 
 **Make AI Truly Understand You**
 
-PromptBuddy is an intelligent prompt engineering automation skill.
+PromptBuddy 是您的智能 Prompt 伙伴。当用户提出问题时，系统会：
 
-## Features
+1. **自动识别**需求类型
+2. **智能选择**最佳模板
+3. **透明展示**工作过程
+4. **生成优化**的回复
 
-- **Auto Detection**: Automatically determines if optimization is needed
-- **Semantic Understanding**: Local TF-IDF engine for intent recognition
-- **Progressive Learning**: Gets better the more you use it
-- **4 Templates**: CoT, Decompose, Criticize, Base
+## 工作流程
 
-## Usage
+当用户提出需求时：
 
-```bash
-./scripts/promptbuddy.sh "Help me write a product description"
+```
+┌─────────────────────────────────────┐
+│ 🤖 PromptBuddy 已优化               │
+│ 识别: [问题类型]                    │
+│ 模板: [模板名称]                    │
+│ 置信度: [0.00-1.00]                 │
+└─────────────────────────────────────┘
+
+[开始回答...]
 ```
 
-## Templates
+## 四种模板
 
-| Template | Use Case |
-|----------|----------|
-| CoT | Reasoning/Analysis |
-| Decompose | Planning/Process |
-| Criticize | Review/Audit |
-| Base | General Q&A |
+| 模板 | 类型 | 说明 |
+|-----|------|------|
+| CoT | 推理型 | 逐步深度思考 |
+| Decompose | 分解型 | 任务步骤分解 |
+| Criticize | 检查型 | 质量审核改进 |
+| Base | 通用型 | 简洁专业回答 |
 
-## Based On
+## 使用方式
 
-"The Prompt Report: A Systematic Survey of Prompt Engineering Techniques"
+用户正常说话即可，系统自动处理：
 
-## License
+```
+用户: "火箭如何上天？"
 
-MIT
+系统输出:
+┌─────────────────────────────────────┐
+│ 🤖 PromptBuddy 已优化               │
+│ 识别: 推理型问题                    │
+│ 模板: CoT（思维链）                 │
+│ 置信度: 0.43                        │
+└─────────────────────────────────────┘
+
+[基于思维链模板的回答...]
+```
+
+## 特殊情况
+
+- **简单查询**（天气、问候）：跳过优化，直接回答
+- **低置信度**：可能需要用户确认模板选择
+
+## 渐进学习
+
+- 新用户：更谨慎，低置信度会询问
+- 学习期：根据用户偏好调整
+- 成熟期：几乎全自动，完全个性化
+
+---
+
+**PromptBuddy - 要AI真懂你**
